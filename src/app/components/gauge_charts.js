@@ -22,7 +22,7 @@ export default function GaugeCharts({solarPotential, render, visPanel}) {
             </h2>
             <div className='flex items-center justify-between w-11/12'>
               <SolarPowerIcon color='primary' fontSize='medium' />
-              {visPanel}/{solarPotential.maxArrayPanelsCount}
+              {Math.round(visPanel).toLocaleString()}/{Math.round(solarPotential.maxArrayPanelsCount).toLocaleString()}
             </div>
             <Chart
               chartType="BarChart"
@@ -49,7 +49,7 @@ export default function GaugeCharts({solarPotential, render, visPanel}) {
             </h2>
             <div className='flex items-center justify-between w-11/12'>
               <EnergySavingsLeafIcon color='success' fontSize='medium' />
-              {currentSavings} / {yearTotalSavings}
+              {currentSavings.toLocaleString()} / {yearTotalSavings.toLocaleString()}
             </div>
             <Chart
               chartType="BarChart"

@@ -29,20 +29,23 @@ export async function getGeoCoordinates(address) {
 export async function getTiffLayer(url) {
   url = url + `&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
   const response = await fetch(url);
-  const buffer = await response.arrayBuffer();
-  const tiff = await fromArrayBuffer(buffer);
-  const numImages = await tiff.getImageCount();
-  console.log(numImages)
-  let results = []
-  // On default, only first image is rendered
-  for (let i = 0; i < numImages; i++) {
-    const image = await tiff.getImage(i);
-    const data = await image.readRasters();
-    results.push({image, data});
+  if (response && response.status === 200) {
+    const buffer = await response.arrayBuffer();
+    const tiff = await fromArrayBuffer(buffer);
+    const numImages = await tiff.getImageCount();
+    console.log(numImages)
+    let results = []
+    // On default, only first image is rendered. This will get us all.
+    for (let i = 0; i < numImages; i++) {
+      const image = await tiff.getImage(i);
+      const data = await image.readRasters();
+      results.push({image, data});
+    }
+    return results
+  } else {
+    console.log(response.error);
+    return
   }
-  // Return Bands as an array
-  // {interleave: true}
-  return results
 };
 
 

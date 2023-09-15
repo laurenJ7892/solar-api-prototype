@@ -28,12 +28,24 @@ export default function Home() {
     const [roofSegmentStats, setRoofSegmentStats] = useState([])
     const [visPanel, setVisPanel] = useState(1)
 
+    const resetState = () => {
+      setGeometry(null);
+      setSolarInfo({}); 
+      setBuildingInsights({});
+      setChartData([]);
+      setPageData({});
+      setRoofSegmentStats([]);
+      setVisPanel(1);
+    }
+
 
     const onLoad = useCallback(function callback(autocomplete) {
+      resetState();
       setSearchRes(autocomplete);
     }, [])
 
     const onPlaceChanged = async () => {
+      resetState();
       if (searchRes) {
         const place = searchRes.getPlace();
         const formattedAddress = place.formatted_address;
@@ -51,7 +63,6 @@ export default function Home() {
         // Building Insights contains building facts and panel design and savings.
         const solarInfo = await getSolarInformation(geo);
         const biAPI = await getBuildingInsights(geo);
-        console.log(solarInfo)
         if (biAPI) {
           setBuildingInsights(biAPI);
           setChartData(biAPI.solarPotential.buildingStats.sunshineQuantiles);
@@ -62,7 +73,7 @@ export default function Home() {
           }
         }
       } else {
-        alert('Geolocation not found.')
+        alert('Geolocation not found for this address. Please try a new address.')
       }
     };
 

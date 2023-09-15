@@ -20,8 +20,6 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "geotiff": "^2.0.7",
-    "leaflet": "^1.9.4",
-    "leaflet-geotiff": "^0.2.0",
     "next": "13.4.19",
     "plotty": "^0.4.9",
     "postcss": "8.4.29",
@@ -30,8 +28,6 @@
     "react-gauge-chart": "^0.4.1",
     "react-google-autocomplete": "^2.7.3",
     "react-google-charts": "^4.0.1",
-    "react-iframe": "^1.8.5",
-    "react-leaflet": "^4.2.1",
     "tailwindcss": "3.3.3"
   }
 }

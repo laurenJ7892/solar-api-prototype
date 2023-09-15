@@ -30,10 +30,10 @@ export default function PageData({pageData, pageTitle}) {
             </div>
             <div className='flex items-center w-11/12 mx-auto'>
              <div className='flex h-full w-1/8 items-center'>
-             { pageData ? <ImageAspectRatioIcon color='primary' /> : '' }
+             { pageData  && (pageData.maxArrayAreaMeters2 || pageData.stats) ? <ImageAspectRatioIcon color='primary' /> : '' }
               </div>
               <div className='flex items-center text-center w-1/2 h-full mx-auto'>
-              {pageData ? 'Area meters2' : ''}
+              {pageData && (pageData.maxArrayAreaMeters2 || pageData.stats) ? <p>Area meters<sup className="font-features sups">2</sup></p> : ''}
               </div>
                 <div className='flex items-center text-center w-1/4 h-full mx-auto'>
                 {pageData && pageData.maxArrayAreaMeters2 ? Math.round(pageData.maxArrayAreaMeters2).toLocaleString() : ''}

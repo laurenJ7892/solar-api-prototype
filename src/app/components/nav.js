@@ -11,10 +11,10 @@ export default function Nav({navTitle, setCurrentPage, currentPage, solarInfo}) 
     const [timeframe, setTimeframe] = useState('hour');
     const { rgbUrl, dsmUrl, maskUrl , monthlyFluxUrl, hourlyShadeUrls, annualFluxUrl } = solarInfo;
 
-    const getData = async (url) => {
+    const getData = async (url, fileType) => {
       setLoading(true);
       const results = await getTiffLayer(url);
-      console.log(results)
+      console.log(results);
       if (results && results.length == 1) {
         const {image, data} = results[0];
         setResponseImage(image)
@@ -24,11 +24,13 @@ export default function Nav({navTitle, setCurrentPage, currentPage, solarInfo}) 
           data: data[0],
           width: image.getWidth(),
           height: image.getHeight(),
-          domain: [0, 256],
+          domain: [0, 256]
         });
         plot.render();
+      } else if (results && results.length > 1) {
+        console.log(results.length)
       } else {
-        alert('No image data');
+        alert('No images found for this layer')
       }
       setLoading(false);
     }
@@ -51,7 +53,7 @@ export default function Nav({navTitle, setCurrentPage, currentPage, solarInfo}) 
           <div className="flex grid grid-rows-4 h-100 gap-y-6">
             <Button
               disabled={loading}
-              onClick={() => getData(rgbUrl)}
+              onClick={() => getData(rgbUrl, 'RGB')}
               > Rgb Layer </Button>
             <Button
               disabled={loading}
@@ -71,7 +73,7 @@ export default function Nav({navTitle, setCurrentPage, currentPage, solarInfo}) 
             </Button>
           </div> : 
           currentPage == 2 ? 
-          <div className='flex w-8/12 mx-auto rounded border-gray-300'>
+          <div className='flex w-8/12 mx-auto rounded'>
             Hourly Shade Urls
             <Slider
               step={1}
@@ -95,11 +97,9 @@ export default function Nav({navTitle, setCurrentPage, currentPage, solarInfo}) 
           : ''}
         </div>
         { responseImage && (currentPage == 1 || currentPage == 2) ? 
-          <div className='fixed block start-5 top-96 z-10 mx-auto rounded-lg'>
-            <div className="h-1/3 w-100">
-              <canvas id="map" className="flex w-full h-full">
+          <div className='fixed top-1/4 left-1/2 w-400 h-399 z-10 rounded-lg border-blue-500 border-solid border-4 m-1'>
+              <canvas id="map" className="w-400 h-399">
               </canvas>
-            </div>
         </div>
         : ''}
       </>
