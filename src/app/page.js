@@ -1,9 +1,6 @@
 "use client"; // This is a client component
-import Image from 'next/image';
-import { useState, useCallback, useRef } from 'react';
-const plotty = require('plotty');
+import { useState, useCallback } from 'react';
 import { Autocomplete, LoadScript  } from '@react-google-maps/api';
-
 
 import PageData from './components/page_data';
 import { getGeoCoordinates, getSolarInformation, getBuildingInsights, getTiffLayer } from '../library/api';
@@ -29,6 +26,7 @@ export default function Home() {
     const [pageData, setPageData] = useState({});
     const [searchRes, setSearchRes] = useState(null);
     const [roofSegmentStats, setRoofSegmentStats] = useState([])
+    const [visPanel, setVisPanel] = useState(1)
 
 
     const onLoad = useCallback(function callback(autocomplete) {
@@ -53,7 +51,7 @@ export default function Home() {
         // Building Insights contains building facts and panel design and savings.
         const solarInfo = await getSolarInformation(geo);
         const biAPI = await getBuildingInsights(geo);
-        console.log(biAPI)
+        console.log(solarInfo)
         if (biAPI) {
           setBuildingInsights(biAPI);
           setChartData(biAPI.solarPotential.buildingStats.sunshineQuantiles);
@@ -61,8 +59,6 @@ export default function Home() {
           setRoofSegmentStats(biAPI.solarPotential.roofSegmentStats)
           if (solarInfo) {
             setSolarInfo(solarInfo);
-            //const { image, data } = await getTiffLayer(solarInfo);
-            //renderTiffLayer(image, data);
           }
         }
       } else {
@@ -70,23 +66,6 @@ export default function Home() {
       }
     };
 
-
-    async function renderTiffLayer(image, data) {
-      if (image) {
-        const canvas = document.getElementById("map");
-        const plot = new plotty.plot({
-          canvas,
-          data: data[0],
-          width: image.getWidth(),
-          height: image.getHeight(),
-          domain: [0, 256],
-        });
-        plot.render();
-      } else {
-        console.log('No image data');
-      }
-    }
-    
     return (
       <>
       <LoadScript
@@ -99,7 +78,8 @@ export default function Home() {
             <Nav
                 navTitle={navPages[currentPage]['navTitle']}
                 setCurrentPage={setCurrentPage}
-                
+                currentPage={geometry ? currentPage : false}
+                solarInfo={solarInfo}
               />
               <div className='flex grid grid-rows-2 h-100 w-100 items-center'>
                 <div className='flex grid grid-cols-3 w-11/12 justify-around items-center'>
@@ -137,20 +117,21 @@ export default function Home() {
               <GaugeCharts
                  solarPotential={buildingInsights.solarPotential}
                  render={currentPage == 4 ? true : false}
+                 visPanel={visPanel}
               />
             </div>
           </div>
           <div className="h-screen bg-green w-3/4">
             <Map 
               geometry={geometry}
+              overallInfo={buildingInsights ? buildingInsights.solarPotential : ''}
               roofSegmentStats={currentPage == 3 && roofSegmentStats ? roofSegmentStats : null}
               setChartData={setChartData}
               setPageData={setPageData}
+              roofTiles={currentPage == 4 && buildingInsights ? buildingInsights.solarPotential : ''}
+              visPanel={visPanel}
+              setVisPanel={setVisPanel}
             />
-            {/* <div className="h-1/3 w-3/4">
-              <canvas id="map" className="flex w-full h-full">
-              </canvas>
-            </div> */}
           </div>
         </div>
         </LoadScript>

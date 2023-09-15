@@ -15,7 +15,6 @@ export async function getGeoCoordinates(address) {
     // The address as entered - delimit with %20 for spaces
     let formattedAddress = address.replace(',', '')
     formattedAddress = address.replace(/\s/g, '%20')
-    console.log(formattedAddress)
     const addressUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${formattedAddress}M&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
     const data = await getData(addressUrl);
     if (data && data['results']) {
@@ -27,14 +26,23 @@ export async function getGeoCoordinates(address) {
   return null
 }
 
-export async function getTiffLayer({ rgbUrl, tiffUrl}) {
-  const url = rgbUrl + `&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
+export async function getTiffLayer(url) {
+  url = url + `&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
   const response = await fetch(url);
   const buffer = await response.arrayBuffer();
   const tiff = await fromArrayBuffer(buffer);
-  const image = await tiff.getImage();
-  const data = await image.readRasters();
-  return { image, data }
+  const numImages = await tiff.getImageCount();
+  console.log(numImages)
+  let results = []
+  // On default, only first image is rendered
+  for (let i = 0; i < numImages; i++) {
+    const image = await tiff.getImage(i);
+    const data = await image.readRasters();
+    results.push({image, data});
+  }
+  // Return Bands as an array
+  // {interleave: true}
+  return results
 };
 
 

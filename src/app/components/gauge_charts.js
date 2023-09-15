@@ -4,8 +4,14 @@ import { Chart } from "react-google-charts";
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 
 
-export default function GaugeCharts({solarPotential, render}) {
-    
+export default function GaugeCharts({solarPotential, render, visPanel}) {
+  let yearTotalSavings, currentSavings;
+  // Flag with John re uncertainity with calculations here.
+  if (solarPotential) {
+    yearTotalSavings =  Math.round(solarPotential.maxArrayPanelsCount * solarPotential.maxSunshineHoursPerYear * solarPotential.panelCapacityWatts / 1000)
+    currentSavings = Math.round(visPanel * solarPotential.maxSunshineHoursPerYear * solarPotential.panelCapacityWatts /1000 )
+  }
+
     return (
       <>
         { solarPotential && render ?
@@ -16,11 +22,11 @@ export default function GaugeCharts({solarPotential, render}) {
             </h2>
             <div className='flex items-center justify-between w-11/12'>
               <SolarPowerIcon color='primary' fontSize='medium' />
-              15/150
+              {visPanel}/{solarPotential.maxArrayPanelsCount}
             </div>
             <Chart
               chartType="BarChart"
-              data={[['Panels', 'Progress'], [15, 30]]}
+              data={[['Panels', 'Progress'], [visPanel, Math.round(visPanel/solarPotential.maxArrayPanelsCount*100)]]}
               width="100%"
               height="50px"
               options={{
@@ -39,15 +45,15 @@ export default function GaugeCharts({solarPotential, render}) {
           </div>
           <div className="flex grid grid-rows-3 w-11/12 mx-auto font-sans text-black mt-5">
             <h2 className='flex items-center text-xl text-center'>
-              Yearly savings
+              Yearly savings (kw/h)
             </h2>
             <div className='flex items-center justify-between w-11/12'>
               <EnergySavingsLeafIcon color='success' fontSize='medium' />
-              256
+              {currentSavings} / {yearTotalSavings}
             </div>
             <Chart
               chartType="BarChart"
-              data={[['Panels', 'Progress'], [15, 30]]}
+              data={[['Savings', 'Progress'], [currentSavings, Math.round(currentSavings/yearTotalSavings*100)]]}
               width="100%"
               height="50px"
               options={{

@@ -3,7 +3,6 @@ import SolarPowerIcon from '@mui/icons-material/SolarPower';
 import ImageAspectRatioIcon from '@mui/icons-material/ImageAspectRatio';
 import WbShadeIcon from '@mui/icons-material/WbShade';
 import ArchitectureIcon from '@mui/icons-material/Architecture';
-import Image from 'next/image';
 
 export default function PageData({pageData, pageTitle}) {
     return (
