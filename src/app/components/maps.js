@@ -114,12 +114,14 @@ export default function Map({geometry, roofSegmentStats, setChartData, setPageDa
       mapTypeId={'satellite'}
     >
       <Polygon
-      paths={paths}
-      strokeColor={'#fff'}
-      strokeOpacity={0}
-      strokeWeight={0}
-      fillColor={'#000'}
-      fillOpacity={0.99}
+        paths={paths}
+        options={{
+          strokeColor: '#fff',
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: '#000',
+          fillOpacity: 0.8,
+        }}
       />
       {roofSegmentStats ? roofSegmentStats.map((element, index) => {
         const position = {

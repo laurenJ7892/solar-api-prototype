@@ -12,7 +12,7 @@ async function getData(url){
 
 export async function getGeoCoordinates(address) {
   if (address) {
-    // The address as entered - delimit with %20 for spaces
+    // The address as entered - delimit with %20 for spaces as per Google's best practices.
     let formattedAddress = address.replace(',', '')
     formattedAddress = address.replace(/\s/g, '%20')
     const addressUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${formattedAddress}M&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
@@ -26,14 +26,16 @@ export async function getGeoCoordinates(address) {
   return null
 }
 
+
+// Geotiff files won't render. Tried to circumvent with geotiff + plotty, but no luck.
+// RGB Image Array is too large for webGL. Need mapping software.
 export async function getTiffLayer(url) {
   url = url + `&key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}`;
   const response = await fetch(url);
   if (response && response.status === 200) {
-    const buffer = await response.arrayBuffer();
-    const tiff = await fromArrayBuffer(buffer);
+    const arrayBuffer = await response.arrayBuffer();
+    const tiff = await fromArrayBuffer(arrayBuffer);
     const numImages = await tiff.getImageCount();
-    console.log(numImages)
     let results = []
     // On default, only first image is rendered. This will get us all.
     for (let i = 0; i < numImages; i++) {
@@ -47,7 +49,6 @@ export async function getTiffLayer(url) {
     return
   }
 };
-
 
 
 export async function getSolarInformation({lat, lng}) {

@@ -4,17 +4,17 @@ import { Chart } from "react-google-charts";
 import EnergySavingsLeafIcon from '@mui/icons-material/EnergySavingsLeaf';
 
 
-export default function GaugeCharts({solarPotential, render, visPanel}) {
-  let yearTotalSavings, currentSavings;
-  // Flag with John re uncertainity with calculations here.
-  if (solarPotential) {
-    yearTotalSavings =  Math.round(solarPotential.maxArrayPanelsCount * solarPotential.maxSunshineHoursPerYear * solarPotential.panelCapacityWatts / 1000)
-    currentSavings = Math.round(visPanel * solarPotential.maxSunshineHoursPerYear * solarPotential.panelCapacityWatts /1000 )
-  }
+export default function GaugeCharts({solarPotential, visPanel}) {
+    let yearTotalSavings, currentSavings;
+    // Flag with John re uncertainity with calculations here.
+    if (solarPotential) {
+      yearTotalSavings =  Math.round(solarPotential.maxArrayPanelsCount * solarPotential.maxSunshineHoursPerYear * solarPotential.panelCapacityWatts / 1000)
+      currentSavings = Math.round(visPanel * solarPotential.maxSunshineHoursPerYear * solarPotential.panelCapacityWatts /1000 )
+    }
 
     return (
       <>
-        { solarPotential && render ?
+        { solarPotential ?
         <div className='flex grid grid-rows-2 w-100 h-100 pt-2'>
           <div className="flex grid grid-rows-3 w-11/12 mx-auto font-sans text-black">
             <h2 className='flex items-center text-xl text-center'>

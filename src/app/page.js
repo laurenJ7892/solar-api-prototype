@@ -8,6 +8,8 @@ import Nav from './components/nav';
 import ColumnChart from './components/column_chart';
 import GaugeCharts from './components/gauge_charts';
 import Map from './components/maps';
+import Downloads from './components/downloads';
+import FluxData from './components/flux_data';
 
 const navPages = {
   1: {'navTitle': 'Data Layers'},
@@ -89,8 +91,6 @@ export default function Home() {
             <Nav
                 navTitle={navPages[currentPage]['navTitle']}
                 setCurrentPage={setCurrentPage}
-                currentPage={geometry ? currentPage : false}
-                solarInfo={solarInfo}
               />
               <div className='flex grid grid-rows-2 h-100 w-100 items-center'>
                 <div className='flex grid grid-cols-3 w-11/12 justify-around items-center'>
@@ -117,19 +117,32 @@ export default function Home() {
                       </Autocomplete>
                   </div>
               </div>
+              {currentPage == 1 ? 
+                <Downloads 
+                  solarInfo={solarInfo}
+                  geometry={geometry}
+                /> 
+              : ''}
+               {currentPage == 2 ? 
+                <FluxData 
+                  solarInfo={solarInfo}
+                /> 
+              : ''}
               <PageData
                 pageData={pageData}
                 pageTitle={navPages[currentPage]['heading']}
               />
-              <ColumnChart
-                mapData={chartData}
-                render={currentPage == 3 ? true : false}
-              />
-              <GaugeCharts
-                 solarPotential={buildingInsights.solarPotential}
-                 render={currentPage == 4 ? true : false}
-                 visPanel={visPanel}
-              />
+              {currentPage == 3 ? 
+                <ColumnChart
+                  mapData={chartData}
+                />
+              : '' }
+              {currentPage == 4 ? 
+                <GaugeCharts
+                  solarPotential={buildingInsights.solarPotential}
+                  visPanel={visPanel}
+                />
+              : '' }
             </div>
           </div>
           <div className="h-screen bg-green w-3/4">

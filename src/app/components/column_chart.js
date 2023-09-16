@@ -1,6 +1,6 @@
 import { Chart } from "react-google-charts";
 
-export default function ColumnChart({mapData, render}) {
+export default function ColumnChart({mapData}) {
     let chartData = [['%', 'kwh/kw']]
     if (mapData) {
       mapData.forEach((element, index) => {
@@ -10,7 +10,7 @@ export default function ColumnChart({mapData, render}) {
 
     return (
       <>
-      { mapData && render && chartData.length > 1 ?
+      { mapData && chartData.length > 1 ?
         <div className="flex grid grid-rows-4 gap-0 h-8/12 w-100 font-sans text-black">
           <h2 className='flex items-center text-l text-left w-11/12 mx-auto'>
             Sunniness over roof area
