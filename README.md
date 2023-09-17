@@ -55,4 +55,11 @@ https://stackoverflow.com/questions/70684478/nextjs-getting-404-with-basepath-an
 #Other Notes
 1. If moving from a prototype into a fully fledged service, I would strongly recommend saving the TIFF files into a DB. Google Solar API access gives you access to the same file for 30 days to reduce API calls.
 
-2. Geotiff are memory intensive to load and extract information from. They take some time to process and download to render.
+2. Geotiff are memory intensive to load and extract information from. They take some time to process and download to render. All layers (except rgb) will not be visible when you open in an image viewer and show as all black. Specialist software is needed.
+
+3. Yearly cost savings were not in the API output directly. These calculations need to be validated by the business and are calculated in the gauge_charts component via: 
+
+``` bash
+yearlyTotalSavings =  max Number of Panels * maximum Sunshine Hours Per Year * panel capacity in watts / 1000
+currentSavings = selected number of panels * maximum Sunshine Hours Per Year * panel capacity in watts / 1000
+```
